@@ -69,11 +69,11 @@ const recordSchema = new mongoose.Schema(
   //   },
     sleeveCondition: {
       type: String,
-      enum: [ "New", "Mint", "VG+", "VG"]
+      enum: [ "New", "Mint", "Near Mint", "VG+", "VG", "Generic"]
     },
    mediaCondition: {
       type: String,
-      enum: [ "New", "Mint", "VG+", "VG"]
+      enum: [ "New", "Mint", "Near Mint", "VG+", "VG", "Generic"]
     },
     
     catno: {
@@ -108,7 +108,7 @@ const recordSchema = new mongoose.Schema(
 
 
 
-// recordSchema.pre('validate',function(next){
+// productSchema.pre('validate',function(next){
 //   if(this.title){
 //     this.slug=slugify(this.title,{lower:true,strict:true})
 //   }
