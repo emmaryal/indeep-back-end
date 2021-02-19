@@ -13,7 +13,7 @@ exports.userCart = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
 
   //check if cart with logged in user id already exists
-  let cartExistByThisUser = await Cart.findOne({ orderedBy: user._id }).exec();
+let cartExistByThisUser = await Cart.findOne({ orderedBy: user._id }).exec();
 
   if (cartExistByThisUser) {
     cartExistByThisUser.remove();
@@ -79,6 +79,6 @@ exports.saveAddress = async (req, res) => {
     { email: req.user.email },
     { address: req.body.address }
   ).exec();
-
+console.log("user address in controllers/user : ", userAddress.address)
   res.json({ ok: true });
 };
