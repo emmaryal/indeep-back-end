@@ -1,6 +1,8 @@
 const User = require("./../models/user");
 const Record = require("./../models/product");
 const Cart = require("./../models/cart");
+const Order = require("../models/order");
+const product = require("./../models/product");
 
 exports.userCart = async (req, res) => {
   const { cart } = req.body;
@@ -13,7 +15,7 @@ exports.userCart = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
 
   //check if cart with logged in user id already exists
-let cartExistByThisUser = await Cart.findOne({ orderedBy: user._id }).exec();
+  let cartExistByThisUser = await Cart.findOne({ orderedBy: user._id }).exec();
 
   if (cartExistByThisUser) {
     cartExistByThisUser.remove();
@@ -25,9 +27,7 @@ let cartExistByThisUser = await Cart.findOne({ orderedBy: user._id }).exec();
     object.product = cart[i]._id;
     object.count = cart[i].count;
     //get price for creating total - get from db rather than front end for security
-    let {price} = await Record.findById(cart[i]._id)
-      .select("price")
-      .exec();
+    let { price } = await Record.findById(cart[i]._id).select("price").exec();
     object.price = price;
     // push object to cart array
     products.push(object);
@@ -55,9 +55,9 @@ let cartExistByThisUser = await Cart.findOne({ orderedBy: user._id }).exec();
 exports.getUserCart = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
   console.log("USER: ------->", user);
-  console.log('user._id', user._id)
+  console.log("user._id", user._id);
   let cart = await Cart.findOne({ orderedBy: user._id })
-   .populate("products.product", "_id title price")
+    .populate("products.product", "_id title price")
     .exec();
   console.log("(controllers/getUserCart--CART------->", cart);
   const { products, cartTotal } = cart;
@@ -79,6 +79,43 @@ exports.saveAddress = async (req, res) => {
     { email: req.user.email },
     { address: req.body.address }
   ).exec();
-console.log("user address in controllers/user : ", userAddress.address)
+  console.log("user address in controllers/user : ", userAddress.address);
   res.json({ ok: true });
+};
+
+exports.createOrder = async (req, res) => {
+
+  const { paymentIntent } = req.body.stripeResponse;
+  const user = await User.findOne({ email: req.user.email }).exec();
+
+  let { products } = await Cart.findOne({ orderedBy: user._id }).exec();
+
+  let newOrder = await new Order({
+    products,
+    paymentIntent,
+    orderedBy: user._id,
+  }).save();
+
+  let bulkOption = products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id },
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+
+  let updated = await Record.bulkWrite(bulkOption, {});
+  console.log("PRODUCT QUANTITY -- SOLD ++", updated);
+  console.log("NEW ORDER SAVED", newOrder);
+  res.json({ ok: true });
+};
+
+exports.orders = async (req, res) => {
+  let user = await User.findOne({ email: req.user.email }).exec();
+  let userOrders = await Order.find({ orderedBy: user._id }).populate(
+    "products.product"
+  ).exec();
+  res.json(userOrders)
+  console.log("userOrders", userOrders)
 };
