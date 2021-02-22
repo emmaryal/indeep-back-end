@@ -8,7 +8,7 @@ const { authCheck} = require("../middlewares/auth");
 
 //controllers
 
-const {userCart, getUserCart, emptyUserCart, saveAddress, createOrder, orders} = require('./../controllers/user');
+const {userCart, getUserCart, emptyUserCart, saveAddress, createOrder, orders, addToWishlist, wishlist, removeFromWishlist} = require('./../controllers/user');
 
 
 router.post('/user/cart', authCheck, userCart); //save Cart
@@ -18,6 +18,11 @@ router.post('/user/address', authCheck, saveAddress)
 
 router.post('/user/order', authCheck, createOrder)
 router.get('/user/orders', authCheck, orders)
+
+//wishlist
+router.post('/user/wishlist', authCheck, addToWishlist)
+router.get('/user/wishlist', authCheck, wishlist)
+router.put('/user/wishlist/:productId', authCheck, removeFromWishlist)
 
 
 // router.get('/user', (req, res)  => {
