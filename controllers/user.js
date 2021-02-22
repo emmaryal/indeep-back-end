@@ -32,15 +32,15 @@ exports.userCart = async (req, res) => {
     // push object to cart array
     products.push(object);
   }
-  console.log("REQ.BODY ____>", req.body);
-  console.log("products", products);
+  // console.log("REQ.BODY ____>", req.body);
+  // console.log("products", products);
 
   let cartTotal = 0;
   for (let i = 0; i < products.length; i++) {
     cartTotal = cartTotal + products[i].price * products[i].count;
   }
 
-  console.log("cart total : ", cartTotal);
+  // console.log("cart total : ", cartTotal);
 
   let newCart = await new Cart({
     products,
@@ -48,20 +48,20 @@ exports.userCart = async (req, res) => {
     orderedBy: user._id,
   }).save();
 
-  console.log("newCart:----> ", newCart);
+  // console.log("newCart:----> ", newCart);
   res.json({ ok: true });
 };
 
 exports.getUserCart = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
-  console.log("USER: ------->", user);
-  console.log("user._id", user._id);
+  // console.log("USER: ------->", user);
+  // console.log("user._id", user._id);
   let cart = await Cart.findOne({ orderedBy: user._id })
     .populate("products.product", "_id title price")
     .exec();
-  console.log("(controllers/getUserCart--CART------->", cart);
+  // console.log("(controllers/getUserCart--CART------->", cart);
   const { products, cartTotal } = cart;
-  console.log("products", products);
+  // console.log("products", products);
   res.json({ products, cartTotal }); //req.data.products
 };
 
@@ -84,7 +84,6 @@ exports.saveAddress = async (req, res) => {
 };
 
 exports.createOrder = async (req, res) => {
-
   const { paymentIntent } = req.body.stripeResponse;
   const user = await User.findOne({ email: req.user.email }).exec();
 
@@ -113,9 +112,39 @@ exports.createOrder = async (req, res) => {
 
 exports.orders = async (req, res) => {
   let user = await User.findOne({ email: req.user.email }).exec();
-  let userOrders = await Order.find({ orderedBy: user._id }).populate(
-    "products.product"
-  ).exec();
-  res.json(userOrders)
-  console.log("userOrders", userOrders)
+  console.log("*********USER  IN CONTROLLERS - FROM USER DB*********", user);
+
+  let userOrders = await Order.find({ orderedBy: user._id })
+    .populate("products.product")
+    .exec();
+  res.json(userOrders);
+  console.log(
+    "*********USER ORDERS IN CONTROLLERS - FROM ORDER DB*********",
+    userOrders
+  );
 };
+
+exports.addToWishlist = async (req, res) => {
+  const { productId } = req.body;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $addToSet: { wishlist: productId } },
+  ).exec();
+
+  res.json({ ok: true });
+};
+
+exports.wishlist = async (req, res) => {
+const list = await User.findOne({ email: req.user.email })
+  .select("wishlist")
+  .populate("wishlist")
+  .exec();
+
+  res.json(list)
+
+};
+
+exports.removeFromWishlist = async (req, res) => {;
+const {productId} = req.params;
+const user = await User.findOneAndUpdate({email:req.user.email}, {$pull: {wishlist: productId}}).exec();
+res.json({ok:true})}
