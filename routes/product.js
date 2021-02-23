@@ -18,20 +18,20 @@ const {
 } = require("../controllers/product");
 
 // routes
-router.post("/product", authCheck, adminCheck, create);
-router.post("/products", list);
-router.get("/products/total", productsCount);
-router.post("/products", list);
+router.post("/api/product", authCheck, adminCheck, create);
+router.post("/api/products", list);
+router.get("/api/products/total", productsCount);
+router.post("/api/products", list);
 
-router.get("/product/:slug", read);
-router.get("/products/:count", listAll); // products/100
-router.delete("/product/:slug", authCheck, adminCheck, remove);
-router.put("/product/:slug", authCheck, adminCheck, update);
+router.get("/api/product/:slug", read);
+router.get("/api/products/:count", listAll); // products/100
+router.delete("/api/product/:slug", authCheck, adminCheck, remove);
+router.put("/api/product/:slug", authCheck, adminCheck, update);
 
 //related
-router.get("/product/related/:productId", listRelated);
+router.get("/api/product/related/:productId", listRelated);
 
 // search
-router.post("/search/filters", searchFilters);
+router.post("/api/search/filters", searchFilters);
 
 module.exports = router;
