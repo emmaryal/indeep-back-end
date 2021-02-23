@@ -54,9 +54,11 @@ app.use('/api', require('./routes/' + r)));
 
 
 //route for serving react app(index.html)
-app.use((req, res, next) => {
-    res.sendFile(__dirname + "/public/index.html")
-});
+// app.use((req, res, next) => {
+//     res.sendFile(__dirname + "/public/index.html")
+// });
+
+app.use(express.static('public'))
 
 
 //port
