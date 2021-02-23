@@ -24,6 +24,20 @@ useNewUrlParser: true,
 .then(()=> console.log('DB CONNECTED'))
 .catch(err => console.log(`DB CONNECTION ERR : ${err}`))
 
+//CORS SETTINGS
+app.use(
+    cors({
+        credentials: true,
+        origin: [
+            "http://localhost:3000",
+            "https://indeeprecords.herokuapp.com",
+            "http://indeeprecords.herokuapp.com"
+        ]
+    })
+)
+
+
+
 //middlewares
 
 app.use(morgan('dev'));
@@ -36,6 +50,14 @@ app.use(cors());
 //routes middleware
 readdirSync('./routes').map((r)=>
 app.use('/api', require('./routes/' + r)));
+
+
+
+//route for serving react app(index.html)
+app.use((req, res, next) => {
+    res.sendFile(__dirname + "/public/index.html")
+});
+
 
 //port
 const port = process.env.PORT || 8000;
