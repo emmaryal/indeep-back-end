@@ -31,7 +31,9 @@ app.use(
         origin: [
             "http://localhost:3000",
             "https://indeeprecords.herokuapp.com",
-            "http://indeeprecords.herokuapp.com"
+            "http://indeeprecords.herokuapp.com",
+            "http://indeeprecords.herokuapp.com/api",
+            "https://indeeprecords.herokuapp.com/api"
         ]
     })
 )
