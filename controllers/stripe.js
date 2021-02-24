@@ -8,6 +8,7 @@ exports.createPaymentIntent = async (req, res) => {
     
 
     const user = await User.findOne({email: req.user.email}).exec()
+
     const {cartTotal} = await Cart.findOne({orderedBy: user._id}).exec()
     console.log('CART TOTAL CHARGED', cartTotal)
   
@@ -19,6 +20,7 @@ exports.createPaymentIntent = async (req, res) => {
 
   
     res.send({
-      clientSecret: paymentIntent.client_secret,
+      //clientSecret: paymentIntent.client_secret,
+      clientSecret: "pi_1IOKQ0Fq2ycg13FN62gAeUvY_secret_GkI5LBunB8VIWrLzXwISheUZe"
     });
   };
