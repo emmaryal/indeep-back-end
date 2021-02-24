@@ -1,6 +1,6 @@
 const User = require("./../models/user");
 const Cart = require("./../models/cart");
-const Product = require("./../models/product");
+//const Product = require("./../models/product");
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
@@ -20,7 +20,6 @@ exports.createPaymentIntent = async (req, res) => {
 
   
     res.send({
-      //clientSecret: paymentIntent.client_secret,
-      clientSecret: "pi_1IOKQ0Fq2ycg13FN62gAeUvY_secret_GkI5LBunB8VIWrLzXwISheUZe"
+      clientSecret: paymentIntent.client_secret,
     });
   };
