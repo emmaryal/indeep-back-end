@@ -15,6 +15,8 @@ exports.createPaymentIntent = async (req, res) => {
       amount: cartTotal *100,
       currency: "eur",
     });
+    console.log("PAYMENT INTENT, controller stripe", paymentIntent)
+
   
     res.send({
       clientSecret: paymentIntent.client_secret,
