@@ -51,7 +51,7 @@ readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
 //     res.sendFile(__dirname + "/public/index.html")
 // });
 
-// app.use(express.static("public"));
+app.use(express.static("public"));
 
 //port
 const port = process.env.PORT || 8000;
