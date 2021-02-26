@@ -29,9 +29,9 @@ router.delete("/product/:slug", authCheck, adminCheck, remove);
 router.put("/product/:slug", authCheck, adminCheck, update);
 
 //related
-router.get("/api/product/related/:productId", listRelated);
+router.get("/product/related/:productId", listRelated);
 
 // search
-router.post("/api/search/filters", searchFilters);
+router.post("/search/filters", searchFilters);
 
 module.exports = router;
