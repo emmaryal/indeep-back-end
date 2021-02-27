@@ -73,7 +73,7 @@ const recordSchema = new mongoose.Schema(
     },
    mediaCondition: {
       type: String,
-      enum: [ "New", "Mint", "Near Mint", "VG+", "VG", "Generic"]
+      enum: [ "New", "Mint", "Near Mint", "VG+", "VG"]
     },
     
     catno: {
@@ -92,7 +92,7 @@ const recordSchema = new mongoose.Schema(
     status: {
       type: String,
       trim: true,
-      required: true,
+      // required: true,
       maxlength: 16,
       text: true,
     },
