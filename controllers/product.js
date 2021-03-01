@@ -152,6 +152,7 @@ const handlePrice = async (req, res, price) => {
     })
       .populate("category", "_id name")
       // .populate("subs", "_id name")
+      // .sort("createdAt", desc)
       .exec();
 
     res.json(products);
@@ -188,6 +189,7 @@ exports.searchFilters = async (req, res) => {
   if (category) {
     console.log("category ----->", category);
     await handleCategory(req, res, category);
+    
 
   }
 };

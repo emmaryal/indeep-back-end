@@ -13,8 +13,11 @@ exports.createPaymentIntent = async (req, res) => {
   const paymentIntent = await stripe.paymentIntents.create({
     amount: cartTotal * 100,
     currency: "eur",
+    receipt_email: user.email
   });
+  console.log("stripe user email", paymentIntent.receipt_email)
   console.log("PAYMENT INTENT, controller stripe", paymentIntent);
+  console.log("stripe user email", paymentIntent.receipt_email)
 
   res.send({
     clientSecret: paymentIntent.client_secret,
